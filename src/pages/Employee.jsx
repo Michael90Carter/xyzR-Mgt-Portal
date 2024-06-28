@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useTable, useSortBy, usePagination} from 'react-table';
 import Modal from 'react-modal';
-import './Agents.css';
+import './Employee.css';
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
@@ -210,7 +210,7 @@ const EmployeeList = () => {
       </div>
 
         <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Add New Employee">
-        <h2>Add New Employee</h2>
+        <h2>Add Employee</h2>
         <form onSubmit={handleSubmit}>
           <label>
             First Name:

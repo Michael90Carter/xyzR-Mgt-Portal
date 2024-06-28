@@ -480,7 +480,7 @@ export const links = [
     title: 'People',
     links: [
       {
-        name: 'agents',
+        name: 'Employees',
         icon: <FiUser />,
       },
     ],

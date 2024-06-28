@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
  import {Navbar, Footer, Sidebar, ThemeSettings,Signin} from './components';
- import {Dashboard, Agents } from './pages';
+ import {Dashboard, Employee } from './pages';
  import { useStateContext } from './contexts/ContextProvider';
  import './App.css';
 
@@ -66,14 +66,8 @@ const App = () => {
                                         <Route path='/dashboard' element={(<Dashboard />)} />
 
                                         {/* other pages */}
-                                        <Route path='/agents' element={<Agents />} />
+                                        <Route path='/employees' element={<Employee />} />
                                         
-
-                                       
-                                        {/* settings */}
-
-                                        <Route path='/orders' element='Pages' />
-                                        <Route path='/orders' element='Pages' />
 
                                     </Routes>
                                 </div>
@@ -86,13 +80,5 @@ const App = () => {
     )
 }
 
-// function Signin(){
-//     return(
-//         <div>
-//             <Signin />
-//             <Outlet />
-//         </div>
-//     );
-// }
 
 export default App;
