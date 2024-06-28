@@ -1,0 +1,59 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+  
+  .pagination {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination button {
+    margin-right: 5px;
+    padding: 5px 10px;
+  }
+  
+  .pagination input {
+    width: 50px;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+  
+  .pagination select {
+    margin-left: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    color: blue;
+  }
+  
+  form label {
+    display: block;
+    margin: 10px 0;
+  }
+  
+  form input {
+    padding: 5px;
+    width: 100%;
+  }
+  
+  form button {
+    margin-top: 10px;
+  }
