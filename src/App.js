@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
  import {Navbar, Footer, Sidebar, ThemeSettings,Signin} from './components';
- import {Dashboard, Employee } from './pages';
+ import {Dashboard, Employee, Department } from './pages';
  import { useStateContext } from './contexts/ContextProvider';
  import './App.css';
 
@@ -67,6 +67,8 @@ const App = () => {
 
                                         {/* other pages */}
                                         <Route path='/employees' element={<Employee />} />
+
+                                        <Route path='/departments' element={<Department />} />
                                         
 
                                     </Routes>

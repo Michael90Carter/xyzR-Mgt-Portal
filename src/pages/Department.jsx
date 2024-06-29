@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useTable, useSortBy, usePagination} from 'react-table';
+//import { Button, button} from '../components';
 import Modal from 'react-modal';
-import './Employee.css';
+import './Department.css';
+import { itemClick } from '@syncfusion/ej2/treemap';
 
-const EmployeeList = () => {
-    const [employees, setEmployees] = useState([]);
+
+
+const DepartmentList = () => {
+    const [departments, setDepartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTcxOTUyNDgzNSwiaXNzIjoiWW91cklzc3VlciIsImF1ZCI6IllvdXJBdWRpZW5jZSJ9.GVjDcGcz3vmIFQAZPhNFhjp0bniiYWUL_LIfCFChoOE';
     const [modalIsOpen, setModalIsOpen ] = useState(false);
-    const [newEmployee, setNewEmployee] = useState({
-      firstName:'',
-      lastName:'',
-      email:'',
-      department:'',
-      phone:''
+    const [newDepartment, setNewDepartment ]= useState({
+
+        departmentName:'',
+
     });
+      
+      
+    
 
     useEffect(() => {
-        const fetchEmployees = async () => {
+        const fetchDepartments = async () => {
             try {
                 
-                const response = await axios.get('https://localhost:7169/api/Employees', {
+                const response = await axios.get('https://localhost:7169/api/Departments', {
                     headers: {
                         Authorization: `Bearer$ {token}`,
                     },
                 });
-                setEmployees(response.data);
+                setDepartments(response.data);
                 setLoading(false);
             } catch (error) {
                 setError(error);
@@ -35,22 +40,19 @@ const EmployeeList = () => {
             }
         };
 
-        fetchEmployees();
+        fetchDepartments();
     }, [token]);
 
     const columns = React.useMemo(
       () => [
         { Header: 'Id', accessor: 'id' },
-        { Header: 'First Name', accessor: 'firstName' },
-        { Header: 'Last Name', accessor: 'lastName' },
-        { Header: 'Email', accessor: 'email' },
-        { Header: 'Email', accessor: 'phone' },
-        { Header: 'Department', accessor: 'department' },
+        { Header: 'Department', accessor: 'departmentName' },
+       
       ],
       []
     );
 
-    const data = React.useMemo(() => employees, [employees]);
+    const data = React.useMemo(() => departments, [departments]);
 
     const {
       getTableProps,
@@ -79,21 +81,21 @@ const EmployeeList = () => {
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
-      setNewEmployee({ ...newEmployee, [name]: value });
+      setNewDepartment({ ...newDepartment, [name]: value });
     };
 
 
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post('https://localhost:7169/api/Employees', newEmployee, {
+        const response = await axios.post('https://localhost:7169/api/Departments', newDepartment, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        setEmployees([...employees, response.data]);
-        setNewEmployee({ firstName: '', lastName: '', email: '', department: '', phone: '' });
+        setDepartments([...departments, response.data]);
+        setNewDepartment({ departmentName: ''});
         closeModal();
       } catch (error) {
         setError(error);
@@ -113,12 +115,12 @@ const EmployeeList = () => {
     };
 
     const exportToCsv = () => {
-      const csv = convertToCsv(employees);
+      const csv = convertToCsv(departments);
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       const url = URL.createObjectURL(blob);
       link.setAttribute('href', url);
-      link.setAttribute('download', 'employees.csv');
+      link.setAttribute('download', 'departments.csv');
       link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
@@ -127,16 +129,18 @@ const EmployeeList = () => {
 
 
     if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error loading employees: {error.message}</p>;
+    if (error) return <p>Error loading departments: {error.message}</p>;
 
     return (
-        <div>
-            <h1>Employee List</h1>
+        <div >
+            <h1>Departments List</h1>
             <button onClick={openModal}>Add New</button>
-            <button onClick={exportToCsv}>Export to CSV</button>
+
+           
+            <button onClick={exportToCsv} >Export to CSV</button>
             <table {...getTableProps()} className="table">
 
-            <thead>
+            <thead >
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
@@ -210,59 +214,20 @@ const EmployeeList = () => {
       </div>
 
         <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Add New Employee">
-        <h2>Add Employee</h2>
+        <h2>Add Department</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            First Name:
+            Enter New Department:
             <input
               type="text"
-              name="firstName"
-              value={newEmployee.firstName}
+              name="departmentName"
+              value={newDepartment.departmentName}
               onChange={handleInputChange}
               required
             />
           </label>
-          <label>
-            Last Name:
-            <input
-              type="text"
-              name="lastName"
-              value={newEmployee.lastName}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={newEmployee.email}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-          <label>
-            Phone:
-            <input
-              type="phone"
-              name="phone"
-              value={newEmployee.phone}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-          <label>
-            Department:
-            <input
-              type="text"
-              name="department"
-              value={newEmployee.department}
-              onChange={handleInputChange}
-              required
-            />
-          </label>
-          <button type="submit">Add Employee</button>
+          
+          <button type="submit">Add </button>
           <button type="button" onClick={closeModal}>
             Cancel
           </button>
@@ -273,4 +238,6 @@ const EmployeeList = () => {
     );
 };
 
-export default EmployeeList;
+
+
+export default DepartmentList;

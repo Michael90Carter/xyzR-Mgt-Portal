@@ -485,6 +485,18 @@ export const links = [
       },
     ],
   },
+
+
+  {
+    title: 'new',
+    links: [
+      {
+        name: 'Departments',
+        icon: <BsBarChart />,
+      },
+      
+    ],
+  },
   
 
   
