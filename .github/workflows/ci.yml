@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger the workflow on pull requests to the main branch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up React app
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build React app
+      run: npm run build
+
+    - name: Run tests
+      run: npm test
+
+    - name: Upload build artifacts
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
