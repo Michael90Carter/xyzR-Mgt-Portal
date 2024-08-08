@@ -3,24 +3,23 @@ name: CI
 on:
   push:
     branches:
-      - master  # Trigger the workflow on pushes to the main branch
+      - main  # Adjust if using a different branch
   pull_request:
     branches:
-      - master  # Trigger the workflow on pull requests to the main branch
+      - main  # Adjust if using a different branch
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  # This will automatically use Node.js 20
 
-    - name: Set up React app
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '20'  # Specify Node.js version 20
 
     - name: Install dependencies
       run: npm install
@@ -28,9 +27,14 @@ jobs:
     - name: Build React app
       run: npm run build
 
+    # Removed the test step
+    # - name: Run tests
+    #   run: npm test
+
     - name: Upload build artifacts
       if: success()
       uses: actions/upload-artifact@v3
       with:
         name: build
         path: build
+
