@@ -4,9 +4,6 @@ import {useTable, useSortBy, usePagination} from 'react-table';
 //import { Button, button} from '../components';
 import Modal from 'react-modal';
 import './Department.css';
-import { itemClick } from '@syncfusion/ej2/treemap';
-
-
 
 const DepartmentList = () => {
     const [departments, setDepartments] = useState([]);
@@ -19,9 +16,28 @@ const DepartmentList = () => {
         departmentName:'',
 
     });
-      
-      
+
     
+      
+      
+    const customStyles ={
+      content:{
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight:'-50%',
+        transform: 'translate(-50%, -50%)',
+        width: '50%',
+        maxWidth: '500px',
+        Padding: '20px',
+        borderRadius: '8px',
+
+      },
+      overlay: {
+        backgroundColor: 'rbba(0, 0, 0, 0.5)'
+      },
+    };
 
     useEffect(() => {
         const fetchDepartments = async () => {
@@ -132,12 +148,19 @@ const DepartmentList = () => {
     if (error) return <p>Error loading departments: {error.message}</p>;
 
     return (
-        <div >
-            <h1>Departments List</h1>
-            <button onClick={openModal}>Add New</button>
+      
+        <div className="">
+          <div>
+          <h1>Departments</h1>
 
-           
-            <button onClick={exportToCsv} >Export to CSV</button>
+          </div>
+            <div className='justify-end flex m-3 flex-wrap  gap-1 items-center mt-10'>
+            <button onClick={openModal} >Add New</button>
+
+<button onClick={exportToCsv} >Export to CSV</button>
+
+            </div>
+            
             <table {...getTableProps()} className="table">
 
             <thead >
@@ -213,7 +236,7 @@ const DepartmentList = () => {
         </select>
       </div>
 
-        <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Add New Employee">
+        <Modal isOpen={modalIsOpen} style={customStyles} onRequestClose={closeModal} contentLabel="Add New Employee">
         <h2>Add Department</h2>
         <form onSubmit={handleSubmit}>
           <label>

@@ -2,6 +2,7 @@
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
+    
   }
   
   .table th,
@@ -9,11 +10,13 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    margin-left: 10px;
   }
   
   .table th {
     background-color: #f2f2f2;
     cursor: pointer;
+    
   }
   
   .pagination {
@@ -42,6 +45,14 @@
     margin: 10px;
     cursor: pointer;
     color: blue;
+    margin-left: 5px;
+    
+    
+  }
+  h1 {
+    color: red;
+    margin-left: 10px;
+    
   }
   
   form label {
@@ -56,4 +67,5 @@
   
   form button {
     margin-top: 10px;
+    color: blue;
   }

@@ -726,7 +726,7 @@ export const userProfileData = [
   {
     icon: <FiCreditCard />,
     title: 'My Tasks',
-    desc: 'To-do and Daily Tasks',
+    desc: 'To-do and Daily Tasks1',
     iconColor: 'rgb(255, 244, 229)',
     iconBg: 'rgb(254, 201, 15)',
   },
@@ -834,7 +834,7 @@ export const customersData = [
   {
     CustomerID: 1005,
 
-    CustomerName: 'Michael',
+    CustomerName: 'MichaelCarter',
     CustomerEmail: 'michael@gmail.com',
     ProjectName: 'Weekly WP Theme',
     Status: 'Cancel',

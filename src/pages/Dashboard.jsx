@@ -4,7 +4,7 @@ import { IoIosMore } from 'react-icons/io';
 import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import { Button, SparkLine, Stacked} from '../components';
-import { earningData, medicalproBranding, recentTransactions, weeklyStats, dropdownData, SparklineAreaData, ecomPieChartData } from '../data/dummy';
+import { earningData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 
 function Dashboard() {

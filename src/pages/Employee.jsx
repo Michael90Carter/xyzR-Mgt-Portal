@@ -4,12 +4,16 @@ import {useTable, useSortBy, usePagination} from 'react-table';
 import Modal from 'react-modal';
 import './Employee.css';
 
+import { useStateContext } from '../contexts/ContextProvider';
+
 const EmployeeList = () => {
+    const currentColor = useStateContext();
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTcxOTUyNDgzNSwiaXNzIjoiWW91cklzc3VlciIsImF1ZCI6IllvdXJBdWRpZW5jZSJ9.GVjDcGcz3vmIFQAZPhNFhjp0bniiYWUL_LIfCFChoOE';
     const [modalIsOpen, setModalIsOpen ] = useState(false);
+    const [editModalIsOpen, setEditModalIsOpen] = useState(false)
     const [newEmployee, setNewEmployee] = useState({
       firstName:'',
       lastName:'',
@@ -17,6 +21,34 @@ const EmployeeList = () => {
       department:'',
       phone:''
     });
+
+    const [editingEmployee, setEditingEmployee] = useState(null);
+    const [editEmployeeData, setEditEmployeeData] = useState({
+      firstName:'',
+      lastName:'',
+      email:'',
+      department:'',
+      phone:''
+    });
+
+    const customStyles ={
+      content:{
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight:'-50%',
+        transform: 'translate(-50%, -50%)',
+        width: '50%',
+        maxWidth: '500px',
+        Padding: '20px',
+        borderRadius: '8px',
+
+      },
+      overlay: {
+        backgroundColor: 'rbba(0, 0, 0, 0.5)'
+      },
+    };
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -44,11 +76,23 @@ const EmployeeList = () => {
         { Header: 'First Name', accessor: 'firstName' },
         { Header: 'Last Name', accessor: 'lastName' },
         { Header: 'Email', accessor: 'email' },
-        { Header: 'Email', accessor: 'phone' },
+        { Header: 'Phone', accessor: 'phone' },
         { Header: 'Department', accessor: 'department' },
+        {
+          Header: 'Actions',
+          accessor:'actions',
+          Cell: ({ row }) => (
+            <div>
+              <button onClick={() => handleEditClick(row.original)}>Edit</button>
+              <button onClick={() => handleDelete(row.original.id)}>Delete</button>
+            </div>
+          )
+        }
       ],
       []
     );
+
+  
 
     const data = React.useMemo(() => employees, [employees]);
 
@@ -100,6 +144,68 @@ const EmployeeList = () => {
       }
     };
 
+    const handleEditClick = (employee) => {
+      setEditingEmployee(employee);
+      setEditEmployeeData({
+        firstName: employee.firstName,
+        firstName: employee.lastName,
+        email: employee.email,
+        department: employee.department,
+        phone: employee.phone,
+
+      });
+      setEditModalIsOpen(true);
+    };
+
+    const closeEditModal =() => {
+      setEditModalIsOpen(false);
+      setEditingEmployee(null);
+    };
+
+    const handleEditInputChange = (e) => {
+      const {name, value }= e.target;
+
+      setEditingEmployeeData({...editingEmployeeData, [name]: value});
+
+    };
+
+    const handleEditSubmit = async (e) => {
+      e.preventDefault();
+      try{
+        const response = await axios.put(`https://localhost:7169/api/Employees/${editingEmployee.id}`, editEmployeeData, {
+          headers: {
+            Authorization:`Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        setEmployees(employees.map(emp => emp.id === editingEmployee.id ? response.data : emp));
+        closeEditModal();
+      } catch (error) {
+        setError(error);
+      }
+      };
+
+      const handleDelete = async (id) => {
+        const confirmDelete = window.confirm("Are You Sure you want to Delete this Employee ?");
+        if (!confirmDelete) {
+          return;
+        }
+
+        try{
+          await axios.delete(`https://localhost:7169/api/Employees/${id}`, {
+            headers: {
+              Authorization:`Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          setEmployees(employees.filter(emp => emp.id !== id));
+        } catch (error) {
+          setError(error);
+        }
+      };
+    
     const convertToCsv = (data) => {
       const headers = Object.keys(data[0]);
       const csvRows = [headers.join(',')];
@@ -130,13 +236,25 @@ const EmployeeList = () => {
     if (error) return <p>Error loading employees: {error.message}</p>;
 
     return (
-        <div>
-            <h1>Employee List</h1>
-            <button onClick={openModal}>Add New</button>
-            <button onClick={exportToCsv}>Export to CSV</button>
+        <div className="flex m-3 flex-wrap justify-end gap-1 items-center mt-5">
+
+
+            <div className='mt-10'>
+            <div className='justify-end flex m-3 flex-wrap  gap-1 items-center '>
+            <button onClick={openModal} >Add New</button>
+
+              <button onClick={exportToCsv} >Export to CSV</button>
+
+            </div>
+            </div>
+              
+            
+          
+            
             <table {...getTableProps()} className="table">
 
             <thead>
+            
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
@@ -209,9 +327,9 @@ const EmployeeList = () => {
         </select>
       </div>
 
-        <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Add New Employee">
-        <h2>Add Employee</h2>
-        <form onSubmit={handleSubmit}>
+        <Modal isOpen={modalIsOpen} style={customStyles} onRequestClose={closeModal} contentLabel="Add New Employee">
+        <h2 className='mt-2 flex m-3 flex-wrap justify-center gap-1 items-center '>Add Employee</h2>
+        <form onSubmit={handleSubmit}className='mt-5'>
           <label>
             First Name:
             <input
@@ -268,9 +386,73 @@ const EmployeeList = () => {
           </button>
         </form>
       </Modal>
+      <Modal isOpen={editModalIsOpen} style={customStyles} onRequestClose={closeEditModal} contentLabel='Edit Employee'>
+          <h1 className='flex m-3 flex-wrap justify-center gap-1 items-center '>Edit Employee</h1>
+          <form onSubmit={handleEditSubmit} className='mt-10'>
+            
+         
+          <label>
+            First Name:
+            <input
+              type="text"
+              name="firstName"
+              value={editEmployeeData.firstName}
+              onChange={handleEditInputChange}
+              required
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              name="lastName"
+              value={editEmployeeData.lastName}
+              onChange={handleEditInputChange}
+              required
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={editEmployeeData.email}
+              onChange={handleEditInputChange}
+              required
+            />
+          </label>
+          <label>
+            Phone:
+            <input
+              type="phone"
+              name="phone"
+              value={editEmployeeData.phone}
+              onChange={handleEditInputChange}
+              required
+            />
+          </label>
+          <label>
+            Department:
+            <input
+              type="text"
+              name="department"
+              value={editEmployeeData.department}
+              onChange={handleEditInputChange}
+              required
+            />
+          </label>
+          <button type="submit">Save</button>
+          <button type="button" onClick={closeEditModal} style={currentColor}>
+            Cancel
+          </button>
+        
+
+          </form>
+      </Modal>
 
         </div>
     );
+  
 };
 
 export default EmployeeList;

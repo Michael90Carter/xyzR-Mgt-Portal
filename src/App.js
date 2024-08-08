@@ -18,8 +18,13 @@ const App = () => {
         }
       }, []);
     return (       
+
+        
     <div className={currentMode ==='Dark' ? 'dark' : ''}>         
             <BrowserRouter>
+
+            
+
                 <div className='flex relative dark:bg-main-dark.bg'>   
                     <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
                         <TooltipComponent content="Settings" position='Top'>
@@ -34,6 +39,10 @@ const App = () => {
                             </button>
                         </TooltipComponent>
                     </div>
+
+                    
+
+
                     {activeMenu ?(
                         <div className='w-72 fixed sidebar
                         dark:bg-secondary-dark-bg
@@ -61,7 +70,7 @@ const App = () => {
                                     <Routes>
 
                                             {/* Authentication */}
-                                        <Route path='/' element={(<Signin />)} />
+                                            <Route path='/' element={(<Signin />)} />
                                         {/* <Route path='/' element={(<Dashboard />)} /> */}
                                         <Route path='/dashboard' element={(<Dashboard />)} />
 
