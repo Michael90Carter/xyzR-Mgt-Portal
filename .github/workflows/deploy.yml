@@ -26,5 +26,5 @@ jobs:
 
     - name: Deploy to GitHub Pages
       run: |
-        git remote set-url origin https://Michael90Carter:${{ secrets.GITHUB_TOKEN }}@github.com/Michael90Carter/xyz-employees.git
+        git remote set-url origin https://Michael90Carter:${{ secrets.GITHUB_TOKEN }}@github.com/Michael90Carter/xyzR-Mgt-Portal.git
         npm run deploy
