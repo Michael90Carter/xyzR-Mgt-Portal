@@ -21,7 +21,7 @@ const App = () => {
 
         
     <div className={currentMode ==='Dark' ? 'dark' : ''}>         
-            <BrowserRouter>
+            <BrowserRouter basename="/xyz-R">
 
             
 
