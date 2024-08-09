@@ -3,7 +3,7 @@ name: CD
 on:
   push:
     branches:
-      - master
+      - master  # Adjust if deploying from a different branch
 
 jobs:
   deploy:
@@ -24,7 +24,12 @@ jobs:
     - name: Build React app
       run: npm run build
 
-    - name: Deploy to GitHub Pages
+    - name: Set up Git configuration
       run: |
-        git remote set-url origin https://Michael90Carter:${{ secrets.GITHUB_TOKEN }}@github.com/Michael90Carter/xyzR-Mgt-Portal.git
-        npm run deploy
+        git config --global user.email "mikeamone@gmail.com.com"
+        git config --global user.name "Michael90Carter"
+
+    - name: Deploy to GitHub Pages
+      run: npm run deploy
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
